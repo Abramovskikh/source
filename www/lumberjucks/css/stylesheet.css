@@ -1,0 +1,35 @@
+/* Стили для web-приложения Lumberjacks */
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+}
+
+#bg-canvas {
+    z-index: 0;
+}
+
+#fg-canvas {
+    z-index: 1;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url("../font/3976.ttf")
+}

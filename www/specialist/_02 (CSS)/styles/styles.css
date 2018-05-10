@@ -1,0 +1,45 @@
+/* Стили */
+
+/* Селектор */
+body 
+/* Блок объявлений */
+{
+	/* Свойства */
+	background: White;
+}
+
+/* Примеры работы с элементами */
+span {
+	color: lightseagreen;
+}
+
+/* Пример силектора класса */
+.hollyday {
+	color: darkred;
+}
+
+/* Пример работы с идендификатором */
+#happyday {
+	color: darkgreen;
+	border: 1px solid Red;
+	font-style: monospace;
+	user-select: none;
+}
+
+/* Псевдоклассы */
+#happyday:hover {
+	color: yellow;
+}
+#happyday:active {
+	color: transparent;
+}
+
+/* Псевдоэлементы */
+.psevdoAfter:after {
+	content: "Псевдоэлемент after! ";
+	background: yellow;
+}
+.psevdoBefore:before {
+	content: " Псевдоэлемент before!";
+	background: yellow;	
+}

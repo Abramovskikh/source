@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1">
+	<title>__</title>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		canvas {
+			display: block;
+			position: absolute;
+			margin: auto;
+			width: 100%;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			user-select: none;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="640" height="360"></canvas>
+	<script>
+		let canvas = document.getElementById("canvas");
+		let context = canvas.getContext("2d");
+
+		canvas.addEventListener("touchstart", handleStart, false);
+		canvas.addEventListener("touchmove", handleMove, false);
+		canvas.addEventListener("touchend", handleEnd, false);
+
+		let point = {
+			x: 0,
+			y: 0
+		}
+
+		let positions = new Array();
+
+		let render = function(c) {
+
+			c.clearRect(0, 0, canvas.width, canvas.height);
+			let lW = c.lineWidth;
+			/*
+			c.fillStyle = "#369";
+			c.fillRect(0, 0, canvas.width, canvas.height);
+			*/
+
+			/*
+			c.strokeStyle = "red";
+			c.beginPath();
+			c.moveTo(Math.random() * canvas.width, 
+				Math.random() * canvas.height);
+			c.lineTo(point.x, point.y);
+			c.stroke();
+			*/
+
+			c.shadowColor = "gray";
+			c.shadowBlur = 20;
+			c.shadowOffsetX = 20;
+
+			c.strokeStyle = "green";
+			c.fillStyle = "white";
+			c.strokeRect(50, 50, 100, 100);
+			c.fillRect(50, 50, 100, 100);
+
+			c.shadowBlur = 0;
+			c.shadowOffsetX = 0;
+			c.fillStyle = "black";
+			c.font = "20px monospace";
+			c.fillText("Кривая", 200, 20);
+
+			c.lineWidth = 5;
+			c.strokeStyle = "darkblue";
+			c.beginPath();
+			c.moveTo(0, canvas.height);
+			for(let i = 0; i < positions.length; i++) {
+				c.lineTo(positions[i].x, positions[i].y);
+			}
+			c.closePath();
+			c.stroke();
+
+			c.lineWidth = lW;
+		};
+
+		let update = function() {
+			let loop = function() {
+				render(context);
+				window.requestAnimationFrame(loop);
+			};
+			loop();
+		};
+
+		update();
+
+		function handleStart(e) {
+			e.preventDefault();
+			let t = e.changedTouches[0];
+			point.x = t.clientX;
+			point.y = t.clientY;
+		}
+		function handleMove(e) {
+			e.preventDefault();
+			let t = e.changedTouches[0];
+			point.x = t.clientX;
+			point.y = t.clientY;
+		}
+		function handleEnd(e) {
+			e.preventDefault();
+			let t = e.changedTouches[0];
+			point.x = t.clientX;
+			point.y = t.clientY;
+
+			positions.push({x: point.x, y: point.y });
+		}
+	</script>
+</body>
+</html>
