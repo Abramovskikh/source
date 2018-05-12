@@ -36,6 +36,7 @@ let Game = {
             Input.init(data);
             // Подготовка материала
             Entities.init(data);
+            Render.init(data);
             // Запуск анимации
             Game.run(data);
 
