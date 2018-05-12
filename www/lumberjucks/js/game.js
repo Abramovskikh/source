@@ -32,6 +32,10 @@ let Game = {
                 sprite: this
             };
 
+            // Подготовка пользовательского ввода
+            Input.init(data);
+            // Подготовка материала
+            Entities.init(data);
             // Запуск анимации
             Game.run(data);
 
@@ -40,7 +44,15 @@ let Game = {
 
     // Запуск анимации
     run: function(data) {
-        //CODE...
+        
+        // Функция покадровой анимации
+        let loop = function(time) {
+
+            window.requestAnimationFrame(loop);
+        };
+
+        // Вызов анимации
+        loop();
     }
 
 };
