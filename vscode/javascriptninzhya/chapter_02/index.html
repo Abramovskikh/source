@@ -6,11 +6,68 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registering event handlers</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+        }
         #first  { color: green; }
         #second { color: red;   }
+        .pass { color: blueviolet; font-size: 18px; }
+        .fail { color: darkred; font-size: 18px; }
     </style>
+    <script>
+        /* Проверка и вывод */
+        function assert(check, text) {
+            let li = document.createElement("li");
+            li.className = check ? "pass" : "fail";
+            li.textContent = text;
+            document.getElementById("result").appendChild(li);
+        }
+        /* Вывод */
+        function report(text) {
+            assert(true, text);
+        }
+    </script>
 </head>
 <body>
+
+    <ul id="result"></ul>
+
+    <!-- Сортировка путем сравнения -->
+    <script>
+        let values = [0, -5, 4, 7, 1, -4, 9, -11];
+        values.sort(function(value1, value2){ return value1 - value2; });
+        report(values.toString());
+    </script>
+
+    <!-- Изучение обратного вызова функции -->
+    <script>
+        let text = "Начальный текст";
+        report("Перед определением функции");
+
+        function useless(callback) {
+            report("В бесполезной функции");
+            /* Обратный вызов */
+            return callback();
+        }
+
+        function getText() {
+            report("В функции с текстом");
+            return text;
+        }
+
+        report("После определения функций");
+
+        assert(useless(getText) === text, "Функция обратного вызова на примере!");
+        assert(useless((function() { return text; })) === text, "Функция определенная прямо в аргументе");
+        report("После всех событий");
+    </script>
     
     <ul id="first"></ul>
 
@@ -41,6 +98,7 @@
         document.body.addEventListener("click", function(){
             let second = document.getElementById("second");
             addMessage(second, "Event: click");
+            
         });
 
     </script>

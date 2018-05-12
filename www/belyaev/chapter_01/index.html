@@ -57,6 +57,8 @@
 			c.stroke();
 			*/
 
+			c.save();
+
 			c.shadowColor = "gray";
 			c.shadowBlur = 20;
 			c.shadowOffsetX = 20;
@@ -83,6 +85,8 @@
 			c.stroke();
 
 			c.lineWidth = lW;
+
+			c.restore();
 		};
 
 		let update = function() {
