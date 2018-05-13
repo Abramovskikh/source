@@ -12,6 +12,8 @@ let Game = {
 
         // Общее представление о холсте
         let canvas = {
+            x: fgCanvas.width,
+            y: fgCanvas.height,
             bgCanvas: bgCanvas,
             fgCanvas: fgCanvas,
             bCtx: bgCanvas.getContext("2d"),
@@ -48,7 +50,7 @@ let Game = {
         
         // Функция покадровой анимации
         let loop = function(time) {
-
+            Render.update(data);
             window.requestAnimationFrame(loop);
         };
 
@@ -57,3 +59,5 @@ let Game = {
     }
 
 };
+
+Game.init();

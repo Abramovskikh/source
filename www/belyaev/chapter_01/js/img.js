@@ -47,12 +47,17 @@ render = function(data) {
     let tch = data.input.touch;
 
     c.clearRect(0, 0, w, h);
+    
+
+    c.fillStyle = "green";
+    c.fillRect(w - w/2, h - h/2, w/2, h/2);
+
     c.save();
 
+
     n = data.animationFrame;
-    // if ((n % 100 >= 0) && (n % 100 < 50)) data.utility.angle += 5;
-    // else data.utility.angle -= 5;
-    data.utility.angle += 5;
+    if ((n % 100 >= 0) && (n % 100 < 50)) data.utility.angle += 5;
+    else data.utility.angle -= 5;
     
     if ((n % 100 >= 0) && (n % 100 < 50)) data.utility.scale += .05;
     else data.utility.scale -= .05;
@@ -63,15 +68,19 @@ render = function(data) {
         pos = tch.locationHandler();
         console.log(pos.x, pos.y);
         c.translate(pos.x, pos.y);
-
+        c.rotate(data.utility.angle * Math.PI / 180);
+        c.scale(data.utility.scale, data.utility.scale);
     }
-
-    c.rotate(data.utility.angle * Math.PI / 180);
-    c.scale(data.utility.scale, data.utility.scale);
+    
+    c.fillStyle = "green";
+    c.fillRect(-200, -200, 400, 400);
 
     c.drawImage(data.sprite, 0, 0, 800, 800, -100, -100, 200, 200);
 
     c.restore();
+
+    c.fillStyle = "brown";
+    c.fillRect(0, 0, w/2, h/2);
 };
 
 let Input = {

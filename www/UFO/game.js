@@ -11,20 +11,27 @@ var game = {
 
 	sprites: {					// Картинки в игре:
 		ufo_bg: undefined,		// _задний фон
-		ship: undefined			// космический корабль
+		ship: undefined,		// космический корабль
+		asteroid: undefined		// астероид
 	},
 
 	ship: {						// Объект игрока в виде коскорабля
 		x: 0,					// Положение на экране по горизонтали
  		y: 0,					// Положение на экране по вертикали
 		width: 140,				// Ширина корабля
-		height: 70				// Высота корабля
+		height: 70,				// Высота корабля
 	},
 	bg: {						// Задний фон как объект для управления им
 		x: 0,
 		y: 0,
 		// Скорость
 		velocity: 5	
+	},
+	asteroid: {
+		x: 0,
+		y: 0,
+		width: 128,
+		height: 128
 	},
 
 	// методы
@@ -52,6 +59,8 @@ var game = {
 		this.context.drawImage(this.sprites.ufo_bg, this.bg.x, this.bg.y);
 		this.context.drawImage(this.sprites.ufo_bg, this.bg.x + this.width, this.bg.y);
 		this.context.drawImage(this.sprites.ship, this.ship.x, this.ship.y);
+		this.context.drawImage(this.sprites.asteroid, 
+			0, 0, 128, 128, 200, 200, 128, 128);
 	},
 
 	update: function() {

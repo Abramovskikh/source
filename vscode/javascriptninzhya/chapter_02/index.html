@@ -39,6 +39,55 @@
 
     <ul id="result"></ul>
 
+    <!-- Пример запоминания (кэширование прошлого ответа) -->
+    <script>
+        // ПРоверка на простое число!
+        function isPrime(value) {
+            // Создаем кэш объект
+            if (!isPrime.answer) {
+                isPrime.answer = {};
+            }
+            // Если в кэш есть значение возвращаем его
+            if (isPrime.answer[value] !== undefined) {
+                return isPrime.answer[value];
+            }
+
+            let prime = value !== 0 && value !== 1; // ПРостое число
+
+            // ПРоверка на простоту числа (имеет два делителя - 1 и само себя)
+            for(let i = 2; i < value; i++) {
+                if (value % i === 0) {
+                    prime = false;
+                    break;
+                }
+            }
+            // Сохраняем в кэш и возвращаем результат
+            return isPrime.answer[value] = prime;
+        }
+        assert(isPrime(5), "5 простое число");
+        assert(isPrime.answer[5], "5 есть в кэш");
+
+    </script>
+
+    <!-- Пример сохранения функций по добавленному к ним свойству -->
+    <script>
+        // Объект для хранения уникальных функций
+        let store = {
+            nextID: 1,  // Присвоение функции номера ID для идентификации
+            cache: {},  // Объект с хранением функций
+            add: function(fn) { // Метод добавляющий функцию в коллекцию
+                if(!fn.id) {    // Проверка на идентичность
+                    fn.id = this.nextID++;  
+                    this.cache[fn.id] = fn; // Добавление в коллекцию
+                    return true;            // При успешном добавлении
+                }
+            }
+        };
+        let myFn = function() { };
+        assert(store.add(myFn), "Функция была успешно добавлена.");
+        assert(!store.add(myFn), "Но ее можно добавить только один раз.");
+    </script>
+
     <!-- Сортировка путем сравнения -->
     <script>
         let values = [0, -5, 4, 7, 1, -4, 9, -11];
