@@ -50,12 +50,23 @@ let Game = {
         
         // Функция покадровой анимации
         let loop = function(time) {
-            Render.update(data);
+            Game.input(data);
+            Game.update(data);
+            Game.render(data);
             window.requestAnimationFrame(loop);
         };
 
         // Вызов анимации
         loop();
+    },
+    input: function(data) {
+
+        },
+    update: function(data) {
+
+    },
+    render: function(data) {
+        Render.update(data);
     }
 
 };

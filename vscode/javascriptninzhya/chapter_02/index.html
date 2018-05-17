@@ -39,6 +39,15 @@
 
     <ul id="result"></ul>
 
+    <!-- Оставшиеся параметры -->
+    <script>
+        let multiMax = function(value, ...values) {
+            values.sort((a, b) => b - a);
+            return value * values[0];
+        };
+        assert(multiMax(9, 1, 2, 3, -1) === 27, "Все верно! 9 * 3 === 27");
+    </script>
+
     <!-- Стрелочные функции -->
     <script>
         let valuesS = [2, -1, 44, -11];
