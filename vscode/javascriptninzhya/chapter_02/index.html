@@ -39,6 +39,21 @@
 
     <ul id="result"></ul>
 
+    <!-- Сандартные параметры -->
+    <script>
+        function performAction(name, action) {
+            action = typeof action === "undefined" ? "стандартное" : action;
+            report(action);
+        }
+        function stdParam(name, action = "стандартное") {
+            return name + " " + action;
+        }
+        performAction("name");
+        performAction("name", "что то!");
+        assert(stdParam("john", "sleep") === "john sleep", "С аргументом");
+        assert(stdParam("john") === "john стандартное", "Стандартное значение");
+    </script>
+
     <!-- Оставшиеся параметры -->
     <script>
         let multiMax = function(value, ...values) {
