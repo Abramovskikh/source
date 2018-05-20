@@ -6,8 +6,11 @@ let Render = {
     update: function(data) {
         let c = data.canvas.fCtx;
         c.clearRect(0, 0, data.canvas.w, data.canvas.h);
+        Render.helpers.drawIntitiy(data.entities.jack, c);
 
-        data.entities.coinsArray.forEach(coin => Render.helpers.drawIntitiy(coin, c));
+        data.entities.coinsArray.forEach(coin => {
+            Render.helpers.drawIntitiy(coin, c)
+        });
     },
 
     helpers: {

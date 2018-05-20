@@ -12,8 +12,8 @@ let Game = {
 
         // Общее представление о холсте
         let canvas = {
-            x: fgCanvas.width,
-            y: fgCanvas.height,
+            w: fgCanvas.width,
+            h: fgCanvas.height,
             bgCanvas: bgCanvas,
             fgCanvas: fgCanvas,
             bCtx: bgCanvas.getContext("2d"),
@@ -53,6 +53,7 @@ let Game = {
             Game.input(data);
             Game.update(data);
             Game.render(data);
+            data.animationFrame++;
             window.requestAnimationFrame(loop);
         };
 
@@ -63,7 +64,8 @@ let Game = {
 
         },
     update: function(data) {
-
+        Animation.update(data);
+        Physics.update(data);
     },
     render: function(data) {
         Render.update(data);
