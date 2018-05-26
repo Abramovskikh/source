@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 3</title>
+</head>
+<body>
+    <button id="btn">Click me!</button>
+    <script>
+        // Конструктор для создания обработчика события нажатия кнопки
+        function Button() {
+            // Флаг нажатия
+            this.clicked = false;
+            // Метод работающий при нажатии кнопки
+            this.click = function() {
+                this.clicked = true;
+                // Отладочная информацтия
+                console.log(button.clicked);
+                console.log("Кнопка была нажата");
+            }
+        }
+        let button = new Button();
+        let btn = document.getElementById("btn");
+        btn.addEventListener("click", button.click);
+
+        // Пример работы методов функций apply и call
+        function jug(...numbers) {
+            let result = 0;
+            numbers.forEach(val => result += val);
+            // Передается как свойство для объекта
+            this.result = result;
+        }
+
+        // Тестируемые объекты. После вызова метода функции call или apply
+        //в объект добавляется свойство result
+        let numOne = {};
+        let numTwo = {};
+
+        jug.apply(numOne, [2, 3, 5, 7]);
+        jug.call(numTwo, 9, 17);
+
+        console.log(numOne.result === 17, " должо быть true");
+        console.log(numTwo.result === 26, " должо быть true");
+
+        function forEach(list, callback) {
+            for (var i = 0; i < list.length; i++) {
+                callback.call(list[i], i);
+            }
+        }
+
+        let weapons = [
+                    { type: 'лук' }, 
+                    { type: 'пистолет' }, 
+                    { type: 'топор' }
+                    ];
+
+        let numbersA = [ 1, 2, 3 ];
+
+        forEach(weapons, item => {
+            console.log(weapons[item].type);
+        });
+
+        forEach(numbersA, item => {
+            console.log(numbersA[item]);
+        });
+    </script>
+</body>
+</html>118
