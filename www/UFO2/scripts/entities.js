@@ -8,8 +8,13 @@ let Entities = {
             sprite: new Entities.helpers.Sprite(data.sprite, 0, 198, 640, 360),
             x: 0,
             y: 0,
-            w: 640,
-            h: 360
+            w: 640 * 2,
+            h: 360,
+            speed: 2,
+            move: function(data){
+                if(background.x + background.w / 2 <= 0) background.x = 0
+                background.x -= background.speed;
+            }
         };
 
         // Добавляем объект к глобальным данным

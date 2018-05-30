@@ -22,7 +22,9 @@
         }
         let button = new Button();
         let btn = document.getElementById("btn");
-        btn.addEventListener("click", button.click);
+        /* Метод bind для всех функций и предназначен для создания и возврата
+        новой функции, привязанной к объекту, передаваемому этому методу. */
+        btn.addEventListener("click", button.click.bind(button));
 
         // Пример работы методов функций apply и call
         function jug(...numbers) {
@@ -66,4 +68,4 @@
         });
     </script>
 </body>
-</html>118
+</html>

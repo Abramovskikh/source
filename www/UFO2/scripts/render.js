@@ -2,9 +2,16 @@
 let Render = {
     // Инициализация объектов
     init: function(data) {
-        Render.helpers.draw(data.entities.background, data.canvas.bCtx);
+
     },
     
+    // Обновление холста
+    update: function(data) {
+        let contextBG = data.canvas.bCtx;
+        contextBG.clearRect(0, 0, data.w, data.h);
+        Render.helpers.draw(data.entities.background, contextBG);
+    },
+
     // Различные вспомогательные инструменты
     helpers: {
         // Метод как отрисовать изображение

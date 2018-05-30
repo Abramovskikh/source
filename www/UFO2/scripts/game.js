@@ -10,6 +10,8 @@ let Game = {
         let canvas = {
             bCanvas: bgCanvas,
             fCanvas: fgCanvas,
+            w: bgCanvas.width,
+            h: bgCanvas.height,
             bCtx: bgCanvas.getContext("2d"),
             fCtx: fgCanvas.getContext("2d")
         };
@@ -25,6 +27,8 @@ let Game = {
             let data = {
                 animationFrame: 0,  // Кадры анимации
                 canvas: canvas,     // Холтсы
+                w: bgCanvas.width,  // Ширина холста
+                h: bgCanvas.height, // Высота холста
                 sprite: this        // Картинка
             };
 
@@ -45,9 +49,22 @@ let Game = {
         let loop = function() {
             data.animationFrame++;
             console.log(data.animationFrame);
+            Game.render(data);
+            Game.update(data);
             window.requestAnimationFrame(loop);
         };
         loop();
+    },
+
+    // Обновление состояния
+    update: function(data) {
+        // Движение фона
+        data.entities.background.move(data);
+    },
+
+    // Отрисовка кадров
+    render: function(data) {
+        Render.update(data);
     }
 };
 

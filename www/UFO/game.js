@@ -1,3 +1,18 @@
+let Entities = {
+	init: function(data) {
+
+	},
+	helpers: {
+		Sprite: function(img, srcX, srcY, srcW, srcH){
+			this.img = img;
+			this.srcX = srcX;
+			this.srcY = srcY;
+			this.srcW = srcW;
+			this.srcH = srcH;
+		}
+	}
+};
+
 var game = {
 
 	// переменные
@@ -31,7 +46,8 @@ var game = {
 		x: 0,
 		y: 0,
 		width: 128,
-		height: 128
+		height: 128,
+		frame: [new Entities.helpers.Sprite()]
 	},
 
 	// методы
