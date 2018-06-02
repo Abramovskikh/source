@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава пятая</title>
+    <style>
+        #wrapper {
+            display: block;
+            position: absolute;
+            margin: 0 auto;
+            background-color: transparent;
+            width: 100%;
+        }
+        #result {
+            background-color: #eff;
+        }
+        .err {
+            color: red;
+            text-decoration: line-through;
+        }
+        .crr {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <ul id="result"></ul>
+    </div>
+    <script>
+        let assert = function(value, text) {
+            let li = document.createElement("li");
+            li.className = value ? "crr" : "err";
+            li.textContent = text;
+            document.getElementById("result").appendChild(li);
+        };
+        let report = function(text) {
+            assert(true, text);
+        }
+
+        /* Замыкания предоствляют функции доступ к внешним по отношению к ней переменным
+        и позволяет манипулировать ими. Замыкания делают доступными для функции
+        все переменные, а так же другие функции, которые оказываются в области
+        видимости во время ее определения. */
+
+        // Глобальные переменные
+        var outerValue = "Внешняя переменная";
+        var later = () => report("Ссылка на пустую функцию");
+
+        // Функция определяет замыкания
+        function outerFunction() {
+            // Локальная переменная
+            var innerValue = "Внутренняя переменная";
+            // Локальная функция
+            function innerFunction() {
+                assert(outerValue === "Внешняя переменная", "Функция видит внешнюю переменную");
+                assert(innerValue === "Внутренняя переменная", "Функция видит внутреннюю переменную");
+            }
+            // Присваиваем внешней переменной ссылку на локальную функцию
+            // Контекст функции innerFunction также передается в переменную later
+            later = innerFunction;
+        }
+
+        later();            // Вызов пустой функции
+        outerFunction();    // Определение внутренней функции
+        later();            // Вызов внутренней функции с её контекстом
+
+    </script>
+</body>
+</html>
