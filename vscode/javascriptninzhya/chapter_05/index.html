@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Глава пятая</title>
     <style>
+        html body {
+            margin: 0;
+            padding: 0;
+        }
         #wrapper {
             display: block;
             position: absolute;
@@ -13,6 +17,7 @@
             width: 100%;
         }
         #result {
+            position: relative;
             background-color: #eff;
         }
         .err {
@@ -22,12 +27,36 @@
         .crr {
             color: green;
         }
+        #box {
+            position: relative;
+        }
+        #inBox, #inBoxSecond {
+            display: block;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 0px;
+            left: 0px;
+            border: 1px solid black;
+            border-radius: 30%;
+            background-color: transparent;
+        }
+        #inBoxSecond {
+            top: 25px;
+        }
     </style>
 </head>
 <body>
+    <!-- Контекст страницы -->
     <div id="wrapper">
         <ul id="result"></ul>
+        <div id="box">
+            <div id="inBox"></div>
+            <div id="inBoxSecond"></div>
+        </div>
     </div>
+
+    <!-- Скрипты -->
     <script>
         let assert = function(value, text) {
             let li = document.createElement("li");
@@ -66,6 +95,86 @@
         outerFunction();    // Определение внутренней функции
         later();            // Вызов внутренней функции с её контекстом
 
+        /* Во многих языках программирования применяются закрытые переменные (private variables)
+        в JS этого можно достигнуть с помощью замыканий */
+
+        // Конструктор для создания объектов Ninja
+        function Ninja() {
+            // Закрытая переменная
+            var feints = 0;
+            // Геттер на закрытую переменную
+            this.getFeints = function() { return feints; }
+            // Метод для изменения закрытой переменной
+            this.feint = function() { feints++; }
+
+        }
+
+        // Создание объектов для проверки закрытых переменных
+        let ninjaOne = new Ninja();
+        ninjaOne.feint();   // Увеличиваем закрытую переменную feints этого объекта
+
+        assert(ninjaOne.feints === undefined, "Доступа к закрытым переменным нет!");
+        assert(ninjaOne.getFeints() === 1, "Получаем доступ к закрытой переменной чз геттер");
+
+        let ninjaTwo = new Ninja();
+        ninjaTwo.feint();   // Увеличиваем закрытую переменную feints этого объекта
+        ninjaTwo.feint();
+        assert(ninjaTwo.getFeints() === 2, "У второго объекта своя закрытая переменная");
+
+        /* Применение замыканий при обратном вызове */
+        // Функция простой анимации элемента
+        function animateIt(elementID, step = 10) {
+            // Получаем элемент из DOM страницы
+            let el = document.getElementById(elementID);
+            let tick = 0;   // Счетчик шагов
+
+            let timer = setInterval(function() {
+                if (tick < 100) {
+                    el.style.left = tick + "px"; // Перемещаем елемент влево
+                    tick++; // Увеличить кадры
+                } else {
+                    // Остановить таймер
+                    clearInterval(timer);
+                    assert(tick === 100, "Таймер остановлен");
+                    assert(el, "Элемент также остановился");
+                    assert(timer, "Ссылка на таймер закрыта");
+                }
+            }, step);
+        }
+        animateIt("inBox");
+        /* Не нужно создавать отдельные переменные для движения элемента.
+        Они находятся в контекте функции при замыкании (el, tick, timer).
+        Каждая функция получает свой "закрытый" набор переменных. */
+        animateIt("inBoxSecond", 5);
+
+        report('//==================================================================');
+        // Поведение переменных типа const
+        const firstConst = "константа";
+        assert(firstConst === "константа", "firstConst значение совпадает");
+
+        // Попытка изменить значение в переменной типа const
+        try {
+            firstConst = "не константа";
+            report("СРАБОТАЛО");    // Сообщение об успешной замене
+        } catch(e) {
+            // Показывает что действие не допустимо
+            report("Переход в блок catch, смена значения для переменной типа const недопустима");
+        }
+        // После манипуляций переменная сохранила свое значение 
+        assert(firstConst === "константа", "значение firstConst по прежнему неизменно");
+        // Вторая переменная const значение которой объект
+        const secondConst = {};
+        // Переменная является только неизменяемой ссылкой на объект
+        secondConst.name = 'secondConst';
+        assert(secondConst.name === 'secondConst', "В объект, ссылка на который const, можно добавлять свойства");
+        // Третья переменная значение которой массив
+        const thirdConst = [];
+        assert(thirdConst.length === 0, "Нет значений в массиве");
+        // Как и на объект переменная является ссылкой на объект массива
+        thirdConst.push("Значение");
+        assert(thirdConst.length === 1, "Массив не пустой");
+
+        report('//==================================================================');
     </script>
 </body>
-</html>
+</html>167
