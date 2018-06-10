@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runner</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="640" height="360"></canvas>
+    <script>
+        
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext("2d");
+
+        let bg = new Image();
+        bg.src = "img/sprite.png";
+
+        let player = new Image();
+        player.src = "img/player.png"
+
+        let x1 = 0;
+        let x2 = 640;
+
+        let framePlayerX = 0;
+        let frame = 0;
+        let speed = 10;
+
+        let loop = function() {
+
+            x1 -= 5;
+            x2 -= 5;
+
+            context.drawImage(bg, x1, 0, 640, 360);
+            context.drawImage(bg, x2, 0, 640, 360);
+
+            context.drawImage(player, 
+                framePlayerX, 0, 50, 75,
+                250, 150, 50 * 2, 75 * 2);
+
+            if(frame % speed == speed - 1) framePlayerX += 50;
+            if (framePlayerX > 150) framePlayerX = 0;
+
+            if(x1 < -640) x1 = 640;
+            if(x2 < -640) x2 = 640;
+
+            frame++;
+            window.requestAnimationFrame(loop);
+        };
+
+        loop();
+    </script>
+</body>
+</html>

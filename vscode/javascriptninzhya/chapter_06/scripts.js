@@ -32,20 +32,26 @@ function* FoodGenerator() {
     yield "Молоко";
     yield "Печенье";
     yield "Масло";
+    yield (function(){report("Генерация"); return "Генератор";})();
 }
 
 // Результат вызова генератора создает итератор
 const getFood = FoodGenerator();
 
+// Метод next() возвращает объект, содержащий значение, вычисленное генератором
 let food = getFood.next();
-assert(typeof food === 'object' && food.value === "Хлеб", "Генереация успешна: " + food.value);
+assert(typeof food === 'object' && food.value === "Хлеб", "Генерация успешна: " + food.value);
 
 food = getFood.next();
-assert(typeof food === 'object' && food.value === "Яблоко", "Генереация успешна: " + food.value);
+assert(typeof food === 'object' && food.value === "Яблоко", "Генерация успешна: " + food.value);
 
 getFood.next();  // Молоко
 getFood.next();  // Печенье
 
 food = getFood.next();
-assert(typeof food === 'object' && food.value === "Масло", "Генереация успешна: " + food.value);
+assert(typeof food === 'object' && food.value === "Масло", "Генерация успешна: " + food.value);
 
+let gen = getFood.next();  // Генерация
+for(let p in gen) report(p + ": " + gen[p]);
+
+176
