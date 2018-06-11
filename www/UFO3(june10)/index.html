@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFO</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            width: 100%;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+        }
+
+        #bg-canvas {
+            z-index: 0;
+        }
+        #fg-canvas {
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas" width="360" height="640"></canvas>
+    <canvas id="fg-canvas" width="360" height="640"></canvas>
+    <script src="scripts.js"></script>
+</body>
+</html>
