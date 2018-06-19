@@ -4,9 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Глава шестая</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            font: 16px monospace;
+        }
+        .currect {
+            color: darkgreen;
+        }
+        .fail {
+            color: darkred;
+            text-decoration: line-through;
+        }
+    </style>
 </head>
 <body>
-    <script> 
+    <ul id="result"></ul>
+
+    <!-- ================================================ -->
+    <div id="subTree">
+        <form action="#">
+            <input type="text">
+        </form>
+        <p>Параграф</p>
+        <div>
+            <span>Строка</span>
+        </div>
+    </div>
+    <script>
+        let assert = function(value, text) {
+            let res = document.getElementById("result");
+            let li = document.createElement('li');
+            li.textContent = text;
+            li.className = value ? "currect" : "fail";
+            res.insertBefore(li, res.children[0]);
+        };
+        let report = function(text) {
+            assert(true, text);
+        };
+
+        //=================================================
+
+        // Рекурсивный обход элементов DOM
+        function traverseDOM(element, callback){
+            // Работаем с элементов с помощью функции обратного вызова 
+            callback(element);
+            // Пробуем получить первый элемент внутри 
+            element = element.firstElementChild;
+            while(element) {
+                traverseDOM(element, callback);
+                element = element.nextElementSibling;
+            }
+        }
+        // Проходим список от элемента с id = subTree
+        traverseDOM(document.getElementById("subTree"), e => {
+            assert(e !== null, e.nodeName);
+        });
+
+        // Обход элементов с помощью генераторов
+        function* DomTraverse(element) {
+            // Выдача элемента для обработки
+            yield element;
+            element = element.firstElementChild;
+            while(element) {
+                yield* DomTraverse(element);
+                element = element.nextElementSibling;
+            }
+        }
+        report("С помощью генератора");
+        for(let element of DomTraverse(document.getElementById("subTree"))) {
+            assert(element !== null, element.nodeName);
+        }
+
+        //=================================================
+
+        // Отправка значений в виде аргументов функции-генератора
+        function* foodGenerator(subFood) {
+            const imposter = yield ("Bread " + subFood);
+            assert(imposter === 'масло', "Масло проникло в генератор");
+            yield ("Получисля хлеб с " + imposter);
+        }
+        const getFood = foodGenerator("butter");
+        report(getFood.next().value);
+        report(getFood.next("масло").value);
     </script>
 </body>
 </html>

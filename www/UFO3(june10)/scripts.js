@@ -23,6 +23,9 @@ let Entities = {
                 location[0], location[1], 32, 32));
         });
 
+        // Создание игрового персонажа (космический корабль)
+        let spaceship = new Entities.tools.Spaceship(data.sprite, 155, 580, 50, 50);
+        data.entities.spaceship = spaceship;
     },
     // Инструменты настройки
     tools: {
@@ -77,6 +80,55 @@ let Entities = {
                     }
                 }
             }
+        },
+        // Класс создания игрока (космический корабль)
+        Spaceship: function(img, x, y, w, h) {
+            let self = this;
+            this.sprite = new Entities.tools.Sprite(img, 0, 710, 50, 50);
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            // Варианты анимации спрайта
+            this.spriteAnimations = {
+                forward: Entities.tools.Sprite(img, 0, 710, 50, 50),
+                moveLeft: {
+                    frames: [
+                        new Entities.tools.Sprite(img, 50, 710, 50, 50),
+                        new Entities.tools.Sprite(img, 100, 710, 50, 50),
+                        new Entities.tools.Sprite(img, 150, 710, 50, 50),
+                        new Entities.tools.Sprite(img, 200, 710, 50, 50),
+                        new Entities.tools.Sprite(img, 250, 710, 50, 50),
+                        new Entities.tools.Sprite(img, 300, 710, 50, 50)
+                    ],
+                    currentFrame: 0
+                },
+                moveRight: {
+                    frames: [
+                        new Entities.tools.Sprite(img, 50, 760, 50, 50),
+                        new Entities.tools.Sprite(img, 100, 760, 50, 50),
+                        new Entities.tools.Sprite(img, 150, 760, 50, 50),
+                        new Entities.tools.Sprite(img, 200, 760, 50, 50),
+                        new Entities.tools.Sprite(img, 250, 760, 50, 50),
+                        new Entities.tools.Sprite(img, 300, 760, 50, 50)
+                    ],
+                    currentFrame: 0
+                },
+            },
+            // Состояние анимации
+            this.states = {
+                // Без движения
+                forward: {
+                    animation: function(data) {
+                        self.sprite = spriteAnimations.forward;
+                    }
+                },
+                left: {
+                    animation: function(data) {
+                        
+                    }
+                }
+            }
         }
     }
 };
@@ -109,6 +161,10 @@ let Render = {
         context.clearRect(0, 0, data.canvas.w, data.canvas.h);
         // Сохраняем состояние холста
         context.save();
+
+        // Рисуем игрока (космический корабль)
+        Render.tools.drawSprite(data.entities.spaceship, context);
+
         // Рисуем астероиды
         data.entities.asteroidArray.forEach(function(asteroid){
             Render.tools.drawSprite(asteroid, context);

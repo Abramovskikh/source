@@ -53,5 +53,3 @@ assert(typeof food === 'object' && food.value === "Масло", "Генерац�
 
 let gen = getFood.next();  // Генерация
 for(let p in gen) report(p + ": " + gen[p]);
-
-176
