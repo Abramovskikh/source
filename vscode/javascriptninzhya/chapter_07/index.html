@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Глава Седьмая</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #wrapper {
+            display: block;
+            position: relative;
+            margin: 10px auto;
+            border: 1px solid black;
+            border-radius: 10px;
+            width: 300px;
+            height: 360px;
+            box-shadow: 0 0 15px gray;
+        }
+        #display {
+            width: 275px;
+            height: 200px;
+            margin: 8px auto;
+            background-color: palegoldenrod;
+            border-radius: 8px;
+            overflow: auto;
+            padding-top: 2px;
+            padding-right: 2px;
+            padding-left: 12px;
+            font: 10px monospace;
+            color: midnightblue;
+            box-shadow: 0 0 5px gray;
+        }
+        .warn {
+            color: brown;
+            text-decoration: line-through;
+        }
+        .currect {
+            color: darkolivegreen;
+        }
+        #smile {
+            display: block;
+            position: absolute;
+            left: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="display">
+            
+        </div>
+    </div>
+    
+    <script>
+        "use strict";
+        let view = {
+            init: function() {
+                console.log(performance.now());
+            },
+            tools: {
+                Debug: function() {
+                    let self = this;
+                    let display = document.getElementById("display");
+                    this.assert = function(value, text) {
+                        let div = document.createElement('div');
+                        let textNode = document.createTextNode(text);
+                        div.className = value ? "currect" : "warn";
+                        div.appendChild(textNode);
+                        display.insertBefore(div, display.children[0]);
+                    };
+                    this.report = function(text) {
+                        self.assert(true, text);
+                    }
+                }
+            }
+        };
+        window.addEventListener("load", () => { 
+            view.init();
+            const debug = new view.tools.Debug();
+            const assert = debug.assert;
+            const report = debug.report;
+            // Начало обучения
+
+            // С помощью прототипов одни объекты могут получать доступ
+            //к свойствам другич объектов
+            const oneO   = { prop1: true };
+            const twoO   = { prop2: true };
+            const threeO = { prop3: true };
+            assert('prop1' in oneO, "В первом объекте есть свойство prop1");
+            assert('prop2' in oneO, "В первом объекте нет свойство prop2");
+            // Задаем в качестве прототипа для oneO объект twoO
+            Object.setPrototypeOf(oneO, twoO);
+            assert('prop2' in oneO, "В первом объекте теперь есть свойство prop2");
+            // Задаем в качестве прототипа для twoO объект threeO
+            Object.setPrototypeOf(twoO, threeO);
+            assert('prop3' in twoO, "Во-втором объекте теперь есть свойство prop3");
+            assert('prop3' in oneO, "И в первом объекте теперь есть свойство prop3");
+
+            //========================================================================
+
+            function Ninja(name){
+                this.name = name;
+                this.angry = false;
+            };
+
+            Ninja.prototype.setAngry = function(stats) {
+                    this.angry = stats ? true : false;
+            };
+
+            let ninja1 = new Ninja('one');
+            assert(!ninja1.angry, "Не злой ниндзя " + ninja1.name);
+            ninja1.setAngry(true);
+            assert(ninja1.angry, "Злой ниндзя " + ninja1.name);
+            let ninja2 = new Ninja('two');
+            assert(!ninja2.angry, "Не злой ниндзя " + ninja2.name);
+            let ninja3 = new Ninja('three');
+            assert(!ninja3.angry, "Не злой ниндзя " + ninja3.name);
+
+            Ninja.prototype = {
+                price: function() {
+                    return this.name + ' price';
+                }
+            };
+
+            let ninja4 = new Ninja("four");
+            assert(ninja3.setAngry, "Третий нидзя имеет свойство setAngry");
+            assert(!ninja4.setAngry, "Четвертый нидзя не имеет свойство setAngry");
+            assert(ninja4.price, "Зато имеет свойство от нового прототипа price");
+
+            //========================================================================
+            
+            function Person() {}
+            Person.prototype.dance = function() {};
+
+            function NinjaMan() {}
+            NinjaMan.prototype = {
+                dance: Person.prototype.dance
+            };
+
+            const ninjaMan = new NinjaMan();
+            assert(ninjaMan instanceof NinjaMan, "Относится к ниндзя");
+            assert(ninjaMan instanceof Person, "Относится к человеку");
+            assert(ninjaMan instanceof Object, "Относится к объекту");
+            //232
+            //========================================================================
+            // Конец обучения
+        }, false);
+        
+        window.onfocus = () => { window.location.reload(); }
+    </script>
+</body>
+</html>

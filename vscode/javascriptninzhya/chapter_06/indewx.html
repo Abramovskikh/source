@@ -85,11 +85,31 @@
         function* foodGenerator(subFood) {
             const imposter = yield ("Bread " + subFood);
             assert(imposter === 'масло', "Масло проникло в генератор");
-            yield ("Получисля хлеб с " + imposter);
+            try {
+                yield ("Получисля хлеб с " + imposter);
+                report("Это место не сработает!");
+            } catch (e) {
+                report("Исключение: " + e);
+            }
+            
         }
         const getFood = foodGenerator("butter");
         report(getFood.next().value);
         report(getFood.next("масло").value);
+        getFood.throw("исключение");
+
+        //=================================================
+
+        report('========PROMISE========');
+
+        // Создание простого обещания
+        const foodPromise = new Promise((resolve, reject) => {
+            resolve("яблоко");
+        });
+
+        foodPromise.then(food => {
+            assert(food === 'яблоко', 'Отработка обещания');
+        });
     </script>
 </body>
 </html>
