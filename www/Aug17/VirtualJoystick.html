@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Joystick</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            font-size: 0;
+            overflow: hidden;
+        }
+        #wrapper {
+            position: relative;
+            margin: 0 auto;
+            width: 360px;
+            height: 480px;
+        }
+        #bgStick {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 50% auto;
+            border-radius: 50%;
+            background-color: lightblue;
+            z-index: 0;
+        }
+        #stick {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+            border-radius: 50%;
+            top:0; 
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+    <script>
+
+        let VirtualJoystick = {
+            outPoint: {x: 0, y: 0},
+            init: function(data) {
+                // Получаем элементы джойстика
+                let bg = document.getElementById("bgStick");
+                let stick = document.getElementById("stick");
+                // Ставим стик на середину
+                stick.style.left = bg.clientWidth / 2 - stick.clientWidth / 2 + "px";
+                stick.style.top = bg.clientHeight / 2 - stick.clientHeight / 2 + "px";
+                // Помещаем гобальные данные в свойство помощника
+                VirtualJoystick.tools.data = data;
+                // Добавляем данные джойстика в гобальные 
+                data.joystick = new VirtualJoystick.tools.Joystick(bg, stick.style);
+                data.joystick.stickSize = { w: stick.clientWidth, h: stick.clientHeight }
+                // Добавляем слушателей
+                bg.addEventListener("touchstart", VirtualJoystick.tools.handlerListener.startPointer, false);
+                bg.addEventListener("touchmove", VirtualJoystick.tools.handlerListener.movePointer, false);
+                bg.addEventListener("touchend", VirtualJoystick.tools.handlerListener.endPointer, false);
+            },
+            tools: {
+                data: undefined,
+                // События касаний
+                handlerListener: {
+                    isTouch: false,
+                    // Слушатели касаний
+                    startPointer: function(e) {
+                        VirtualJoystick.tools.handlerListener.isTouch = true;
+                        VirtualJoystick.tools.handlerListener.movePointer(e);
+                    },
+                    movePointer: function(e) {
+                        let xP = e.touches[0].pageX - VirtualJoystick.tools.data.joystick.bgOffsetX - VirtualJoystick.tools.data.joystick.bgSize.w / 2;
+                        let yP = e.touches[0].pageY - VirtualJoystick.tools.data.joystick.bgOffsetY - VirtualJoystick.tools.data.joystick.bgSize.h / 2;
+
+                        VirtualJoystick.tools.data.joystick.movementStick({ 
+                            x: xP + VirtualJoystick.tools.data.joystick.bgSize.w / 2 - VirtualJoystick.tools.data.joystick.stickSize.w / 2, 
+                            y: yP + VirtualJoystick.tools.data.joystick.bgSize.h / 2 - VirtualJoystick.tools.data.joystick.stickSize.h / 2
+                        });
+                        // Нормализуем состояние
+                        VirtualJoystick.tools.data.pointTouch.x = xP / (VirtualJoystick.tools.data.joystick.bgSize.w / 2);
+                        VirtualJoystick.tools.data.pointTouch.y = yP / (VirtualJoystick.tools.data.joystick.bgSize.h / 2);
+                    },
+                    endPointer: function(e) {
+                        VirtualJoystick.tools.handlerListener.isTouch = false;
+                        VirtualJoystick.tools.data.pointTouch.x = 0;
+                        VirtualJoystick.tools.data.pointTouch.y = 0;
+                        VirtualJoystick.tools.data.joystick.movementStick({ 
+                            x: VirtualJoystick.tools.data.joystick.bgSize.w / 2 - VirtualJoystick.tools.data.joystick.stickSize.w / 2, 
+                            y: VirtualJoystick.tools.data.joystick.bgSize.h / 2 - VirtualJoystick.tools.data.joystick.stickSize.h / 2
+                        });
+                    }
+                },
+                // Класс джойпада
+                Joystick: function(bg, stick) {
+                    let self = this;
+
+                    let startX = parseFloat(stick.left);
+                    let startY = parseFloat(stick.top);
+                    let bgWidth = parseFloat(bg.clientWidth);
+                    let bgHeight = parseFloat(bg.clientHeight);
+
+                    this.x = (parseFloat(stick.left) - startX) / bgWidth / 2;
+                    this.y = (parseFloat(stick.top) - startY) / bgHeight / 2;
+                    this.bgOffsetY = parseFloat(bg.offsetTop);
+                    this.bgOffsetX = parseFloat(bg.offsetLeft);
+                    this.bgSize = { w: bg.clientWidth, h: bg.clientHeight }
+
+                    this.getLocation = function() {
+                        return { x: self.x, y: self.y };
+                    }
+
+                    this.movementStick = function(position) {
+                        let x = parseInt(position.x);
+                        let y = parseInt(position.y);
+                        stick.left = x + "px";
+                        stick.top = y + "px";
+                    }
+                }
+            }
+        }
+
+        let App = {
+            init: function() {
+
+                let data = {
+                    frame: 0,
+                    fps: 0,
+                    pointTouch: {x: 0, y:0 }
+                };
+
+                VirtualJoystick.init(data);
+                App.animation(data);
+
+            },
+
+            animation: function(data) {
+
+                let delta;
+                let lastCalledTime = Date.now();
+                
+                let loop = function(startTime) {
+                    data.frame++;
+                    App.update(data);
+                    if (data.frame < 500) {
+                        data.delta = (Date.now() - lastCalledTime) / 1000;
+                        lastCalledTime = Date.now();
+                        data.fps = 1/data.delta;
+                        requestAnimationFrame(loop);
+                    }
+                    // if (data.frame) {
+                    //     delta = (Date.now() - lastCalledTime) / 1000;
+                    //     lastCalledTime = Date.now();
+                    //     data.fps = 1/delta;
+                    //     requestAnimationFrame(loop);
+                    // }
+                }
+
+                loop();
+            },
+
+            update: function(data) {
+
+            }
+        };
+
+        window.addEventListener("load", () => {
+            App.init();
+        }, false);
+
+        // Tools
+        function prop(o) {
+            let s = "";
+            for(let p in o) s += p + ": " + o[p] + "\n";
+            console.log(s);
+        }
+    </script>
+</head>
+<body onfocus="window.location.reload()">
+    <div id="wrapper">
+        <div id="bgStick">
+            <div id="stick"></div>
+        </div>
+    </div>
+</body>
+</html>
