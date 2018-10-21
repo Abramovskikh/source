@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Глава первая</title>
+</head>
+<body>
+    <script>
+        // Анализ производительности
+        console.time("TestTime");       // Запуск таймера
+
+        for(let i = 0, sum = 0; i < 10000; i++) 
+        {
+            // Выполнять трудоемкий код
+            sum += i;
+            sum -= i;
+            sum *= i;
+        }
+
+        console.timeEnd("TestTime");    // Остановка таймера
+    </script>
+</body>
+</html>

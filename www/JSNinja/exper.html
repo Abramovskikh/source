@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function store() {
+            return this.name;
+        }
+        store.name = "no name";
+        console.log("store()");
+        console.log(store());
+        console.log(store.name);
+    </script>
+</body>
+</html>

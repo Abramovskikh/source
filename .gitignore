@@ -3,3 +3,6 @@
 *.psd
 *.jpg
 */**/Joystick.cs
+*.fbx
+*.c4d
+*.dll
